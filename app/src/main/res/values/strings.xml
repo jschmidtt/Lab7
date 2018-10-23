@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Lab 7</string>
+
+    <string name="action_new">New Tab</string>
+    <string name="action_back">Forward</string>
+    <string name="action_forward">Back</string>
+
+    <string name="url_name">URL</string>
+    <string name="go_button">GO</string>
+
+    <string name="button_back">Back</string>
+    <string name="button_forward">Next</string>
+</resources>

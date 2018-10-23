@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_new"
+        android:checkable="false"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/action_new"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_backward"
+        android:checkable="false"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/action_back"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_forward"
+        android:checkable="false"
+        android:icon="@android:drawable/ic_media_next"
+        android:title="@string/action_forward"
+        app:showAsAction="always" />
+</menu>
