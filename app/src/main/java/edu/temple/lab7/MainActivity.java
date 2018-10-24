@@ -44,19 +44,33 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    //ActionBar---Handling Menu Clicks
+    //ActionBar---ButtonPressed
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_backward){
-            //Action Backward
-        } else if (id == R.id.action_forward){
-            //Action Forward
-        } else if (id == R.id.action_new){
-            //Action New
+        switch (id){
+            //New Tab Button
+            case R.id.action_new:{
+                //Reset URL Text
+                textViewURL.setText("");
+                //Start Up Fresh Fragment
+                WebViewFragment webViewFragment = WebViewFragment.newInstance("");
+                fm.beginTransaction().replace(R.id.container_1, webViewFragment).addToBackStack(null).commit();
+                break;
+            }
+            //Back Button
+            case R.id.action_backward:{
+
+                break;
+            }
+            //Forward Button
+            case R.id.action_forward:{
+                
+                break;
+            }
         }
 
-        return super.onContextItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 }
