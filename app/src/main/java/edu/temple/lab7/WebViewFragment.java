@@ -75,6 +75,11 @@ public class WebViewFragment extends Fragment {
     }
 
     //URL METHOD
+    public void loadURL(String url){
+        URL = url;
+        loadUrlFromTextView();
+    }
+
     private void loadUrlFromTextView() {
         new Thread(){
             public void run(){
