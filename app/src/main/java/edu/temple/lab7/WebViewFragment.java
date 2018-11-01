@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,7 @@ public class WebViewFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_web_view, container, false);
 
         webView = v.findViewById(R.id.webView);
+        webView.setWebViewClient(new HelloWebViewClient());
 
         loadUrlFromTextView();
 
@@ -101,5 +103,13 @@ public class WebViewFragment extends Fragment {
             return false;
         }
     });
+
+    private class HelloWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+    }
 
 }
