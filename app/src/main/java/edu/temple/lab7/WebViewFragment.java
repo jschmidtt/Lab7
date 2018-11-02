@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class WebViewFragment extends Fragment {
     WebView webView;
     TextView urlTextView;
     Context context;
+    Button backButton,forwardButton;
 
     String URL;
 
@@ -68,13 +70,33 @@ public class WebViewFragment extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_web_view, container, false);
 
+        backButton = v.findViewById(R.id.backButton);
+        forwardButton = v.findViewById(R.id.forwardButton);
+
         webView = v.findViewById(R.id.webView);
         webView.setWebViewClient(new HelloWebViewClient());
 
         loadUrlFromTextView();
 
+        //Handle Webview Back Button
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               if(webView.canGoBack()) webView.goBack();
+            }
+        });
+
+        //Handle Webview Forward Button
+        forwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(webView.canGoForward()) webView.goForward();
+            }
+        });
+
         return v;
     }
+
 
     //URL METHOD
     public void loadURL(String url){
@@ -110,6 +132,7 @@ public class WebViewFragment extends Fragment {
             view.loadUrl(url);
             return true;
         }
+
     }
 
 }
