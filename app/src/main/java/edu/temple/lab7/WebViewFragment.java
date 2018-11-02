@@ -2,6 +2,7 @@ package edu.temple.lab7;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -133,6 +134,19 @@ public class WebViewFragment extends Fragment {
             return true;
         }
 
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            ((GetURL)context).getURL(url);
+            URL = url;
+        }
+
     }
+
+    interface GetURL {
+        void getURL(String loadedURL);
+    }
+
+
 
 }

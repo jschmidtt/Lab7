@@ -1,6 +1,9 @@
 package edu.temple.lab7;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,7 +16,7 @@ import android.widget.Toast;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WebViewFragment.GetURL {
 
     FragmentManager fm = getSupportFragmentManager();
     Button goButton;
@@ -22,6 +25,22 @@ public class MainActivity extends AppCompatActivity {
     WebViewFragment wf;
     ArrayList fragmentList = new ArrayList();
     Integer i=0;
+
+    ViewPager viewPager;
+    WebViewFragment fragments[];
+
+    //Get FSPA
+    FragmentStatePagerAdapter fspa = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+        @Override
+        public Fragment getItem(int i) {
+            return fragments[i];
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.length;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +51,38 @@ public class MainActivity extends AppCompatActivity {
 
         textViewURL = findViewById(R.id.urlEditText);
 
-        wf = WebViewFragment.newInstance("");
+        viewPager = findViewById(R.id.viewPager);
+
+        fragments = new WebViewFragment[2];
+
+        fragments[0] = WebViewFragment.newInstance("");
+        fragments[1] = WebViewFragment.newInstance("");
+
+        viewPager.setAdapter(fspa);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                getURL(fragments[i].URL);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
         //Main Page Home Page
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (first) {
-                    first = false;
-                    fm.beginTransaction().replace(R.id.container_1, wf).addToBackStack(null).commit();
-                    wf.loadURL(textViewURL.getText().toString());
-                } else {
-                    wf.loadURL(textViewURL.getText().toString());
-                }
+                int i = viewPager.getCurrentItem();
+                fragments[i].loadURL(textViewURL.getText().toString());
             }
         });
     }
@@ -64,37 +102,23 @@ public class MainActivity extends AppCompatActivity {
         switch (id){
             //New Tab Button
             case R.id.action_new:{
-                //Save current
-                fragmentList.add(i,wf);
-                Toast.makeText(this, i.toString(), Toast.LENGTH_LONG);
-                i++;
-                //Reset URL Text
-                textViewURL.setText("");
-                //Start Up Fresh Fragment
-                wf = WebViewFragment.newInstance("");
-                fm.beginTransaction().replace(R.id.container_1, wf).addToBackStack(null).commit();
-                break;
+
             }
             //Back Button
             case R.id.action_backward:{
-                fragmentList.add(i,wf);
-                Toast.makeText(this, i.toString(), Toast.LENGTH_LONG);
-                i--;
-                wf = (WebViewFragment) fragmentList.get(i);
-                fm.beginTransaction().replace(R.id.container_1, wf).addToBackStack(null).commit();
-                break;
+
             }
             //Forward Button
             case R.id.action_forward:{
-                fragmentList.add(i,wf);
-                Toast.makeText(this, i.toString(), Toast.LENGTH_LONG);
-                i++;
-                wf = (WebViewFragment) fragmentList.get(i);
-                fm.beginTransaction().replace(R.id.container_1, wf).addToBackStack(null).commit();
-                break;
+
             }
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void getURL(String loadedURL) {
+        textViewURL.setText(loadedURL);
     }
 }
