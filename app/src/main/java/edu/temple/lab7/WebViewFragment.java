@@ -111,26 +111,8 @@ public class WebViewFragment extends Fragment {
     }
 
     private void loadUrlFromTextView() {
-        new Thread(){
-            public void run(){
-                //Grab url from urlTextView
-                String sb = URL;
-                Message msg = Message.obtain();
-                msg.obj = sb;
-                responseHandler.sendMessage(msg);
-            }
-        }.start();
+        webView.loadUrl(URL);
     }
-
-    //Handler
-    Handler responseHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            Toast.makeText(context, (String) msg.obj, Toast.LENGTH_SHORT).show();
-            webView.loadUrl((String) msg.obj);
-            return false;
-        }
-    });
 
     private class HelloWebViewClient extends WebViewClient {
         @Override
@@ -142,14 +124,14 @@ public class WebViewFragment extends Fragment {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            ((GetURL)context).getURL(url);
+            ((GetURL)context).getURL(url, view);
             URL = url;
         }
 
     }
 
     interface GetURL {
-        void getURL(String loadedURL);
+        void getURL(String loadedURL, WebView webViewPassed);
     }
 
     @Override

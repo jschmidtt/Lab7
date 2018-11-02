@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
 
             @Override
             public void onPageSelected(int i) {
-                getURL(fragmentList.get(i).URL);
+                textViewURL.setText(fragmentList.get(i).URL);
             }
 
             @Override
@@ -131,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
     }
 
     @Override
-    public void getURL(String loadedURL) {
-        textViewURL.setText(loadedURL);
+    public void getURL(String loadedURL, WebView webViewPassed) {
+        //only change url if the current webview is visible 
+        if(fragmentList.get(viewPager.getCurrentItem()).webView == webViewPassed) textViewURL.setText(loadedURL);
     }
 }
