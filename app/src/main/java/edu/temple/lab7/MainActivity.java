@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
     TextView textViewURL;
     Boolean first = true;
     WebViewFragment wf;
-    ArrayList fragmentList = new ArrayList();
+    ArrayList <WebViewFragment> fragmentList = new ArrayList();
     Integer i=0;
 
     ViewPager viewPager;
@@ -33,12 +33,12 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
     FragmentStatePagerAdapter fspa = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
         @Override
         public Fragment getItem(int i) {
-            return fragments[i];
+            return fragmentList.get(i);
         }
 
         @Override
         public int getCount() {
-            return fragments.length;
+            return fragmentList.size();
         }
     };
 
@@ -53,10 +53,12 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
 
         viewPager = findViewById(R.id.viewPager);
 
-        fragments = new WebViewFragment[2];
+        //fragments = new WebViewFragment[2];
 
-        fragments[0] = WebViewFragment.newInstance("");
-        fragments[1] = WebViewFragment.newInstance("");
+        //fragments[0] = WebViewFragment.newInstance("");
+        //fragments[1] = WebViewFragment.newInstance("");
+
+        fragmentList.add(WebViewFragment.newInstance(""));
 
         viewPager.setAdapter(fspa);
 
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
 
             @Override
             public void onPageSelected(int i) {
-                getURL(fragments[i].URL);
+                getURL(fragmentList.get(i).URL);
             }
 
             @Override
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
             @Override
             public void onClick(View v) {
                 int i = viewPager.getCurrentItem();
-                fragments[i].loadURL(textViewURL.getText().toString());
+                fragmentList.get(i).loadURL(textViewURL.getText().toString());
             }
         });
     }
@@ -98,19 +100,30 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        int tab = fragmentList.size()-1;
 
         switch (id){
             //New Tab Button
             case R.id.action_new:{
-
+                fragmentList.add(WebViewFragment.newInstance(""));
+                fspa.notifyDataSetChanged();
+                tab++;
+                viewPager.setCurrentItem(tab);
+                break;
             }
             //Back Button
             case R.id.action_backward:{
-
+                if(tab > 0){
+                    tab--;
+                    fspa.notifyDataSetChanged();
+                    viewPager.setCurrentItem(tab);
+                    break;
+                }
             }
             //Forward Button
             case R.id.action_forward:{
 
+                break;
             }
         }
 
