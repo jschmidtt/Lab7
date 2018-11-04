@@ -26,27 +26,26 @@ import java.net.URL;
 
 public class WebViewFragment extends Fragment {
 
-    View v;
-    WebView webView;
-    TextView urlTextView;
-    Context context;
-    Button backButton,forwardButton;
+    View v; //View
+    WebView webView; //WebView
+    Context context; //Context/Parent
+    Button backButton,forwardButton; //Back and Forward Button
+    String URL; //My URL
 
-    String URL;
-
-    public static String WEB_KEY = "web_key";
-
+    public static String WEB_KEY = "web_key"; //web_key
+    public static String URL_KEY = "url_key"; //url_key
     public WebViewFragment() {
         // Required empty public constructor
     }
 
+    //Grab the context/parent
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         this.context = context;
     }
 
+    //Grab URL from bundle
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +53,7 @@ public class WebViewFragment extends Fragment {
         URL = bundle.getString(WEB_KEY);
     }
 
+    //Create a new WebViewFragment with the URL from the parent's URL Bar/Edit Text
     public static WebViewFragment newInstance(String URL){
         //Create instances of the Fragment
         WebViewFragment webViewFragment = new WebViewFragment();
@@ -66,6 +66,7 @@ public class WebViewFragment extends Fragment {
         return webViewFragment;
     }
 
+    //Set up the WebView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,13 +79,14 @@ public class WebViewFragment extends Fragment {
         webView = v.findViewById(R.id.webView);
         webView.setWebViewClient(new HelloWebViewClient());
 
+        //If this WebView was previously loaded grab the old URL and load it.
         if(savedInstanceState != null){
-            URL = savedInstanceState.getString("URL_KEY");
+            URL = savedInstanceState.getString(URL_KEY);
         }
 
         loadUrlFromTextView();
 
-        //Handle Webview Back Button
+        //Handle WebView Back Button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +94,7 @@ public class WebViewFragment extends Fragment {
             }
         });
 
-        //Handle Webview Forward Button
+        //Handle WebView Forward Button
         forwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,10 +112,12 @@ public class WebViewFragment extends Fragment {
         loadUrlFromTextView();
     }
 
+    //Above and this method need to be cleaned, should be only one method here
     private void loadUrlFromTextView() {
         webView.loadUrl(URL);
     }
 
+    //WebView client to handle overriding default browser and updating the URL for the parent's url bar
     private class HelloWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -130,13 +134,15 @@ public class WebViewFragment extends Fragment {
 
     }
 
+    //Interface for parent for updating the URL Bar
     interface GetURL {
         void getURL(String loadedURL, WebView webViewPassed);
     }
 
+    //If this WebView is being pushed out of memory save the URL for future loading upon return
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString("URL_KEY", URL);
+        outState.putString(URL_KEY, URL);
         super.onSaveInstanceState(outState);
     }
 }
