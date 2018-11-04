@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
     WebViewFragment wf;
     ArrayList <WebViewFragment> fragmentList = new ArrayList();
     Integer i=0;
+    Integer tab;
 
     ViewPager viewPager;
     WebViewFragment fragments[];
@@ -101,30 +102,39 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        int tab = fragmentList.size()-1;
 
         switch (id){
             //New Tab Button
             case R.id.action_new:{
                 fragmentList.add(WebViewFragment.newInstance(""));
                 fspa.notifyDataSetChanged();
-                tab++;
+                tab = fragmentList.size()-1;
                 viewPager.setCurrentItem(tab);
-                break;
+                return true;
             }
             //Back Button
             case R.id.action_backward:{
+                tab = viewPager.getCurrentItem();
                 if(tab > 0){
                     tab--;
                     fspa.notifyDataSetChanged();
                     viewPager.setCurrentItem(tab);
-                    break;
+                    return true;
+                }else  if (tab == 0){
+                    tab = fragmentList.size()-1;
+                    fspa.notifyDataSetChanged();
+                    viewPager.setCurrentItem(tab);
                 }
             }
             //Forward Button
             case R.id.action_forward:{
-
-                break;
+                tab = viewPager.getCurrentItem();
+                if(tab < fragmentList.size()-1){
+                    tab++;
+                    fspa.notifyDataSetChanged();
+                    viewPager.setCurrentItem(tab);
+                    return true;
+                }
             }
         }
 
@@ -133,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
 
     @Override
     public void getURL(String loadedURL, WebView webViewPassed) {
-        //only change url if the current webview is visible 
+        //only change url if the current webview is visible
         if(fragmentList.get(viewPager.getCurrentItem()).webView == webViewPassed) textViewURL.setText(loadedURL);
     }
 }
