@@ -1,5 +1,6 @@
 package edu.temple.lab7;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
     ArrayList <WebViewFragment> fragmentList = new ArrayList(); //Array list to hold tabs aka the WebView fragments
     Integer tab; //Keep Track of current tab/WebView in view.
     ViewPager viewPager; //ViewPager for WebView Fragments
+    String outsideURL; //Implicit URL
 
     //Get FSPA to handle swipes and current tabs
     FragmentStatePagerAdapter fspa = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
@@ -76,6 +78,21 @@ public class MainActivity extends AppCompatActivity implements WebViewFragment.G
                 fragmentList.get(i).loadURL(textViewURL.getText().toString());
             }
         });
+
+        //Grab outside URL if there is one
+        Intent intent = getIntent();
+        if(intent.getData() != null) {
+            outsideURL = intent.getData().toString();
+        }
+
+        //If There was an outsideURL from the intent then load it into a new tab
+        if(outsideURL != null){
+            fspa.notifyDataSetChanged();
+            fragmentList.add(WebViewFragment.newInstance(outsideURL));
+            fspa.notifyDataSetChanged();
+            tab = fragmentList.size()-1;
+            viewPager.setCurrentItem(tab);
+        }
     }
 
     //ActionBar---Inflate Menu
